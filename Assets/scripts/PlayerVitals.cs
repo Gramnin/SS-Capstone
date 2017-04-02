@@ -1,11 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-public class PlayerVitals : MonoBehavior
+public class PlayerVitals : MonoBehaviour
 {
     public Slider healthSlider;
-    public int maxHealth;
+    public int maxHeath;
     public int healthFallRate;
 
     public Slider thirstSlider;
@@ -16,40 +16,22 @@ public class PlayerVitals : MonoBehavior
     public int maxHunger;
     public int hungerFallRate;
 
-    public Slider staminaSlider;
-    public int maxStamina;
-    private int staminaFallRate;
-    public int staminaFallMult;
-    private int staminaRegainRate;
-    public int staminaRegainMult;
-
-    private CharacterController charController;
-    private FirstPersonController playerController;
-
     void Start()
     {
-        healthSlider.maxValue = maxHealth;
-        healthSlider.value = maxHealth;
+        healthSlider.maxValue = maxHeath;
+        healthSlider.value = maxHeath;
 
         thirstSlider.maxValue = maxThirst;
         thirstSlider.value = maxThirst;
 
         hungerSlider.maxValue = maxHunger;
         hungerSlider.value = maxHunger;
-
-        staminaSlider.maxValue = maxStamina;
-        staminaSlider.value = maxStamina;
-        staminaFallRate = 1;
-        staminaRegainRate = 1;
-
-        charController = GetComponent<CharacterController>();
-        playerController = GetComponent<FirstPersonController>();
     }
 
     void Update()
     {
-        // Health control
-        if (hungerSlider.value <= 0 && thirstSlider.value <= 0)
+        //Health Controller
+        if (hungerSlider.value <= 0 && (thirstSlider.value <= 0))
         {
             healthSlider.value -= Time.deltaTime / healthFallRate * 2;
         }
@@ -57,31 +39,14 @@ public class PlayerVitals : MonoBehavior
         {
             healthSlider.value -= Time.deltaTime / healthFallRate;
         }
-        else if (healthSlider.value > maxHealth)
-        {
-            healthSlider.value = maxHealth;
-        }
-        else if (healthSlider.value <= 0)
+
+        if (healthSlider.value <= 0)
         {
             CharacterDeath();
         }
 
-        // Thirst control
-        if (thirstSlider.value > 0)
-        {
-            thirstSlider.value -= Time.deltaTime / thirstFallRate;
-        }
-        else if (thirstSlider.value <= 0)
-        {
-            thirstSlider.value = 0;
-        }
-        else if (thirstSlider.value > maxThirst)
-        {
-            thirstSlider.value = maxThirst;
-        }
-
-        // Hunger control
-        if (hungerSlider.value > 0)
+        //Hunger Controller
+        if (hungerSlider.value >= 0)
         {
             hungerSlider.value -= Time.deltaTime / hungerFallRate;
         }
@@ -89,38 +54,30 @@ public class PlayerVitals : MonoBehavior
         {
             hungerSlider.value = 0;
         }
-        else if (hungerSlider.value > maxHunger)
+        else if (hungerSlider.value >= maxHunger)
         {
             hungerSlider.value = maxHunger;
         }
 
-        // Stamina control
-        if (charController.velocity.maginitude > 0 && input.getKey(KeyCode.leftShift))
+        //Thirst Controller
+        if (thirstSlider.value >= 0)
         {
-            staminaSlider.value -= Time.deltaTime / staminaFallRate * staminaFallMult;
+            thirstSlider.value -= Time.deltaTime / thirstFallRate;
         }
-        else
+        else if (thirstSlider.value <= 0)
         {
-            staminaSlider.value += Time.deltaTime / staminaRegainRate * staminaRegainMult;
+            thirstSlider.value = 0;
+        }
+        else if (thirstSlider.value >= maxThirst)
+        {
+            thirstSlider.value = maxThirst;
         }
 
-        if (staminaSlider.value <= 0)
-        {
-            staminaSlider.value = 0;
-            playerController.m_RunSpeed = playerController.m_WalkSpeed;
-        }
-        else
-        {
-            playerController.m_RunSpeed = playerController.m_RunSpeedNorm;
-            if (staminaSlider.value >= maxStamina)
-            {
-                staminaSlider.value = maxStamina;
-            }
-        }
     }
 
     void CharacterDeath()
     {
-        ;
+        //Do something here
     }
+
 }
