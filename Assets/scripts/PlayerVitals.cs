@@ -16,6 +16,16 @@ public class PlayerVitals : MonoBehavior
     public int maxHunger;
     public int hungerFallRate;
 
+    public Slider staminaSlider;
+    public int maxStamina;
+    private int staminaFallRate;
+    public int staminaFallMult;
+    private int staminaRegainRate;
+    public int staminaRegainMult;
+
+    private CharacterController charController;
+    private FirstPersonController playerController;
+
     void Start()
     {
         healthSlider.maxValue = maxHealth;
@@ -26,6 +36,14 @@ public class PlayerVitals : MonoBehavior
 
         hungerSlider.maxValue = maxHunger;
         hungerSlider.value = maxHunger;
+
+        staminaSlider.maxValue = maxStamina;
+        staminaSlider.value = maxStamina;
+        staminaFallRate = 1;
+        staminaRegainRate = 1;
+
+        charController = GetComponent<CharacterController>();
+        playerController = GetComponent<FirstPersonController>();
     }
 
     void Update()
@@ -74,6 +92,30 @@ public class PlayerVitals : MonoBehavior
         else if (hungerSlider.value > maxHunger)
         {
             hungerSlider.value = maxHunger;
+        }
+
+        // Stamina control
+        if (charController.velocity.maginitude > 0 && input.getKey(KeyCode.leftShift))
+        {
+            staminaSlider.value -= Time.deltaTime / staminaFallRate * staminaFallMult;
+        }
+        else
+        {
+            staminaSlider.value += Time.deltaTime / staminaRegainRate * staminaRegainMult;
+        }
+
+        if (staminaSlider.value <= 0)
+        {
+            staminaSlider.value = 0;
+            playerController.m_RunSpeed = playerController.m_WalkSpeed;
+        }
+        else
+        {
+            playerController.m_RunSpeed = playerController.m_RunSpeedNorm;
+            if (staminaSlider.value >= maxStamina)
+            {
+                staminaSlider.value = maxStamina;
+            }
         }
     }
 
