@@ -39,6 +39,10 @@ public class PlayerVitals : MonoBehavior
         {
             healthSlider.value -= Time.deltaTime / healthFallRate;
         }
+        else if (healthSlider.value > maxHealth)
+        {
+            healthSlider.value = maxHealth;
+        }
         else if (healthSlider.value <= 0)
         {
             CharacterDeath();
