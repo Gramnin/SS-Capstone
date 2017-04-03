@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class PlayerVitals : MonoBehaviour
 {
@@ -95,7 +96,7 @@ public class PlayerVitals : MonoBehaviour
         }
 
         // Stamina control
-        if (charController.velocity.maginitude > 0 && input.getKey(KeyCode.leftShift))
+        if (charController.velocity.magnitude > 0 && Input.GetKey(KeyCode.LeftShift))
         {
             staminaSlider.value -= Time.deltaTime / staminaFallRate * staminaFallMult;
         }
