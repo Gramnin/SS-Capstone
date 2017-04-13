@@ -24,8 +24,12 @@ public class PlayerVitals : MonoBehaviour
     private int staminaRegainRate;
     public int staminaRegainMult;
 
+    public float deathHeight;
+
     private CharacterController charController;
     private FirstPersonController playerController;
+
+    private Vector3 spawnPos;
 
     void Start()
     {
@@ -45,6 +49,8 @@ public class PlayerVitals : MonoBehaviour
 
         charController = GetComponent<CharacterController>();
         playerController = GetComponent<FirstPersonController>();
+
+        spawnPos = charController.transform.position;
     }
 
     void Update()
@@ -65,6 +71,7 @@ public class PlayerVitals : MonoBehaviour
         else if (healthSlider.value <= 0)
         {
             CharacterDeath();
+            return;
         }
 
         // Thirst control
@@ -118,10 +125,20 @@ public class PlayerVitals : MonoBehaviour
                 staminaSlider.value = maxStamina;
             }
         }
+
+        if (charController.transform.position.y < deathHeight)
+        {
+            CharacterDeath();
+            return;
+        }
     }
 
     void CharacterDeath()
     {
-        ;
+        charController.transform.position = spawnPos;
+        hungerSlider.value = maxHunger;
+        thirstSlider.value = maxThirst;
+        healthSlider.value = maxHealth;
+        staminaSlider.value = maxStamina;
     }
 }
