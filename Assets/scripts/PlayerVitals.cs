@@ -96,7 +96,7 @@ public class PlayerVitals : MonoBehaviour
         }
 
         // Stamina control
-        if (charController.velocity.magnitude > 0 && Input.GetKey(KeyCode.LeftShift))
+        if (charController.velocity.magnitude > 0 && !playerController.m_IsWalking)
         {
             staminaSlider.value -= Time.deltaTime / staminaFallRate * staminaFallMult;
         }
