@@ -24,7 +24,7 @@ static function Object2Terrain () {
     // If there's no mesh collider, add one (and then remove it later when done)
     var addedCollider = false;
     var addedMesh = false;
-    var objCollider = obj.GetComponent.<Collider>() as MeshCollider;
+    var objCollider = obj.collider as MeshCollider;
     if (objCollider == null) {
         objCollider = obj.AddComponent(MeshCollider);
         addedCollider = true;
