@@ -65,7 +65,7 @@ public class PlayerVitals : MonoBehaviour
             return;
         }
         */
-        
+
         // Health control
         if (hungerSlider.value <= 0 && thirstSlider.value <= 0)
         {
@@ -75,12 +75,14 @@ public class PlayerVitals : MonoBehaviour
         {
             healthSlider.value -= Time.deltaTime / healthFallRate;
         }
-        else if (healthSlider.value > maxHealth)
+
+        if (healthSlider.value > maxHealth)
         {
             healthSlider.value = maxHealth;
         }
         else if (healthSlider.value <= 0)
         {
+            healthSlider.value = 0;
             CharacterDeath();
             return;
         }
@@ -90,7 +92,8 @@ public class PlayerVitals : MonoBehaviour
         {
             thirstSlider.value -= Time.deltaTime / thirstFallRate;
         }
-        else if (thirstSlider.value <= 0)
+
+        if (thirstSlider.value <= 0)
         {
             thirstSlider.value = 0;
         }
@@ -104,7 +107,8 @@ public class PlayerVitals : MonoBehaviour
         {
             hungerSlider.value -= Time.deltaTime / hungerFallRate;
         }
-        else if (hungerSlider.value <= 0)
+
+        if (hungerSlider.value <= 0)
         {
             hungerSlider.value = 0;
         }
