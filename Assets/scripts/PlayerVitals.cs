@@ -5,6 +5,8 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class PlayerVitals : MonoBehaviour
 {
+    public bool singlePlayer;
+
     public Slider healthSlider;
     public int maxHealth;
     public int healthFallRate;
@@ -26,35 +28,44 @@ public class PlayerVitals : MonoBehaviour
 
     public float deathHeight;
 
+    public GameObject deathPanel;
+
     private CharacterController charController;
     private FirstPersonController playerController;
+    private MouseLook mouseLook;
+    private float[] mouseSensitivity;
 
     private Vector3 spawnPos;
 
     void Start()
     {
         healthSlider.maxValue = maxHealth;
-        healthSlider.value = maxHealth;
-
         thirstSlider.maxValue = maxThirst;
-        thirstSlider.value = maxThirst;
-
         hungerSlider.maxValue = maxHunger;
-        hungerSlider.value = maxHunger;
-
         staminaSlider.maxValue = maxStamina;
-        staminaSlider.value = maxStamina;
         staminaFallRate = 1;
         staminaRegainRate = 1;
 
         charController = GetComponent<CharacterController>();
         playerController = GetComponent<FirstPersonController>();
+        mouseLook = playerController.m_MouseLook;
+        mouseSensitivity = new float[2] {mouseLook.XSensitivity, mouseLook.YSensitivity};
 
         spawnPos = charController.transform.position;
+
+        CharacterRespawn();
     }
 
     void Update()
     {
+        /*
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            CharacterDeath();
+            return;
+        }
+        */
+        
         // Health control
         if (hungerSlider.value <= 0 && thirstSlider.value <= 0)
         {
@@ -133,12 +144,64 @@ public class PlayerVitals : MonoBehaviour
         }
     }
 
-    void CharacterDeath()
+    void LockCursor(bool locking)
     {
+        mouseLook.SetCursorLock(locking);
+        if (locking)
+        {
+            mouseLook.XSensitivity = mouseSensitivity[0];
+            mouseLook.YSensitivity = mouseSensitivity[1];
+        }
+        else
+        {
+            mouseLook.XSensitivity = 0;
+            mouseLook.YSensitivity = 0;
+        }
+    }
+
+    public void CharacterDeath()
+    {
+        if (singlePlayer)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            GetComponent<AudioSource>().mute = true;
+            charController.enabled = false;
+            playerController.m_UseHeadBob = false;
+        }
+
+        healthSlider.value = 0;
+
+        LockCursor(false);
+        if (deathPanel != null)
+        {
+            deathPanel.SetActive(true);
+        }
+        else
+        {
+            CharacterRespawn();
+        }
+    }
+
+    public void CharacterRespawn()
+    {
+        Time.timeScale = 1;
+        GetComponent<AudioSource>().mute = false;
+        charController.enabled = true;
+        playerController.m_UseHeadBob = true;
+
         charController.transform.position = spawnPos;
         hungerSlider.value = maxHunger;
         thirstSlider.value = maxThirst;
         healthSlider.value = maxHealth;
         staminaSlider.value = maxStamina;
+
+        LockCursor(true);
+        if (deathPanel != null)
+        {
+            deathPanel.SetActive(false);
+        }
     }
 }
