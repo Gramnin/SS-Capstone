@@ -37,6 +37,8 @@ public class PlayerVitals : MonoBehaviour
 
     private Vector3 spawnPos;
 
+    public bool dead; // do not alter this variable from outside of this script
+
     void Start()
     {
         healthSlider.maxValue = maxHealth;
@@ -58,93 +60,96 @@ public class PlayerVitals : MonoBehaviour
 
     void Update()
     {
-        /*
-        if (Input.GetKey(KeyCode.Escape))
+        if (!dead)
         {
-            CharacterDeath();
-            return;
-        }
-        */
-
-        // Health control
-        if (hungerSlider.value <= 0 && thirstSlider.value <= 0)
-        {
-            healthSlider.value -= Time.deltaTime / healthFallRate * 2;
-        }
-        else if (hungerSlider.value <= 0 || thirstSlider.value <= 0)
-        {
-            healthSlider.value -= Time.deltaTime / healthFallRate;
-        }
-
-        if (healthSlider.value > maxHealth)
-        {
-            healthSlider.value = maxHealth;
-        }
-        else if (healthSlider.value <= 0)
-        {
-            healthSlider.value = 0;
-            CharacterDeath();
-            return;
-        }
-
-        // Thirst control
-        if (thirstSlider.value > 0)
-        {
-            thirstSlider.value -= Time.deltaTime / thirstFallRate;
-        }
-
-        if (thirstSlider.value <= 0)
-        {
-            thirstSlider.value = 0;
-        }
-        else if (thirstSlider.value > maxThirst)
-        {
-            thirstSlider.value = maxThirst;
-        }
-
-        // Hunger control
-        if (hungerSlider.value > 0)
-        {
-            hungerSlider.value -= Time.deltaTime / hungerFallRate;
-        }
-
-        if (hungerSlider.value <= 0)
-        {
-            hungerSlider.value = 0;
-        }
-        else if (hungerSlider.value > maxHunger)
-        {
-            hungerSlider.value = maxHunger;
-        }
-
-        // Stamina control
-        if (charController.velocity.magnitude > 0 && !playerController.m_IsWalking)
-        {
-            staminaSlider.value -= Time.deltaTime / staminaFallRate * staminaFallMult;
-        }
-        else
-        {
-            staminaSlider.value += Time.deltaTime / staminaRegainRate * staminaRegainMult;
-        }
-
-        if (staminaSlider.value <= 0)
-        {
-            staminaSlider.value = 0;
-            playerController.m_RunSpeed = playerController.m_WalkSpeed;
-        }
-        else
-        {
-            playerController.m_RunSpeed = playerController.m_RunSpeedNorm;
-            if (staminaSlider.value >= maxStamina)
+            /*
+            if (Input.GetKey(KeyCode.Escape))
             {
-                staminaSlider.value = maxStamina;
+                CharacterDeath();
+                return;
             }
-        }
+            */
 
-        if (charController.transform.position.y < deathHeight)
-        {
-            CharacterDeath();
-            return;
+            // Health control
+            if (hungerSlider.value <= 0 && thirstSlider.value <= 0)
+            {
+                healthSlider.value -= Time.deltaTime / healthFallRate * 2;
+            }
+            else if (hungerSlider.value <= 0 || thirstSlider.value <= 0)
+            {
+                healthSlider.value -= Time.deltaTime / healthFallRate;
+            }
+
+            if (healthSlider.value > maxHealth)
+            {
+                healthSlider.value = maxHealth;
+            }
+            else if (healthSlider.value <= 0)
+            {
+                healthSlider.value = 0;
+                CharacterDeath();
+                return;
+            }
+
+            // Thirst control
+            if (thirstSlider.value > 0)
+            {
+                thirstSlider.value -= Time.deltaTime / thirstFallRate;
+            }
+
+            if (thirstSlider.value <= 0)
+            {
+                thirstSlider.value = 0;
+            }
+            else if (thirstSlider.value > maxThirst)
+            {
+                thirstSlider.value = maxThirst;
+            }
+
+            // Hunger control
+            if (hungerSlider.value > 0)
+            {
+                hungerSlider.value -= Time.deltaTime / hungerFallRate;
+            }
+
+            if (hungerSlider.value <= 0)
+            {
+                hungerSlider.value = 0;
+            }
+            else if (hungerSlider.value > maxHunger)
+            {
+                hungerSlider.value = maxHunger;
+            }
+
+            // Stamina control
+            if (charController.velocity.magnitude > 0 && !playerController.m_IsWalking)
+            {
+                staminaSlider.value -= Time.deltaTime / staminaFallRate * staminaFallMult;
+            }
+            else
+            {
+                staminaSlider.value += Time.deltaTime / staminaRegainRate * staminaRegainMult;
+            }
+
+            if (staminaSlider.value <= 0)
+            {
+                staminaSlider.value = 0;
+                playerController.m_RunSpeed = playerController.m_WalkSpeed;
+            }
+            else
+            {
+                playerController.m_RunSpeed = playerController.m_RunSpeedNorm;
+                if (staminaSlider.value >= maxStamina)
+                {
+                    staminaSlider.value = maxStamina;
+                }
+            }
+
+            if (charController.transform.position.y < deathHeight)
+            {
+                CharacterDeath();
+                return;
+            }
         }
     }
 
@@ -165,6 +170,8 @@ public class PlayerVitals : MonoBehaviour
 
     public void CharacterDeath()
     {
+        dead = true;
+
         if (singlePlayer)
         {
             Time.timeScale = 0;
@@ -207,5 +214,7 @@ public class PlayerVitals : MonoBehaviour
         {
             deathPanel.SetActive(false);
         }
+
+        dead = false;
     }
 }
