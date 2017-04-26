@@ -168,20 +168,35 @@ public class PlayerVitals : MonoBehaviour
         }
     }
 
+    public void FreezeCharacter(bool freeze)
+    {
+        if (freeze)
+        {
+            if (singlePlayer)
+            {
+                Time.timeScale = 0;
+            }
+            else
+            {
+                GetComponent<AudioSource>().mute = true;
+                charController.enabled = false;
+                playerController.m_UseHeadBob = false;
+            }
+        }
+        else
+        {
+            Time.timeScale = 1;
+            GetComponent<AudioSource>().mute = false;
+            charController.enabled = true;
+            playerController.m_UseHeadBob = true;
+        }
+    }
+
     public void CharacterDeath()
     {
         dead = true;
 
-        if (singlePlayer)
-        {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            GetComponent<AudioSource>().mute = true;
-            charController.enabled = false;
-            playerController.m_UseHeadBob = false;
-        }
+        FreezeCharacter(true);
 
         healthSlider.value = 0;
 
@@ -198,11 +213,6 @@ public class PlayerVitals : MonoBehaviour
 
     public void CharacterRespawn()
     {
-        Time.timeScale = 1;
-        GetComponent<AudioSource>().mute = false;
-        charController.enabled = true;
-        playerController.m_UseHeadBob = true;
-
         charController.transform.position = spawnPos;
         hungerSlider.value = maxHunger;
         thirstSlider.value = maxThirst;
@@ -214,6 +224,8 @@ public class PlayerVitals : MonoBehaviour
         {
             deathPanel.SetActive(false);
         }
+
+        FreezeCharacter(false);
 
         dead = false;
     }
