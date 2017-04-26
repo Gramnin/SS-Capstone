@@ -22,7 +22,7 @@ public class Inventory : MonoBehaviour {
 	void Start ()
     {
         CreateLayout();
-        inventoryRect.gameObject.SetActive(false);
+        //inventoryRect.gameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
