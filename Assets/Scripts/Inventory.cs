@@ -8,8 +8,8 @@ public class Inventory : MonoBehaviour {
 
     private float inventoryWidth;
     private float inventoryHeight;
-    public int slots;
-    public int rows;
+    private int slots = 30;
+    private int rows = 3;
     public float slotPaddingLeft;
     public float slotPaddingTop;
     public float slotSize;
@@ -22,6 +22,7 @@ public class Inventory : MonoBehaviour {
 	void Start ()
     {
         CreateLayout();
+        inventoryRect.gameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
