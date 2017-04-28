@@ -15,20 +15,42 @@ public class Inventory : MonoBehaviour {
     public float slotSize;
 
     public GameObject slotPrefab;
+    public GameObject panel;
+    public GameObject canvas;
+    public GameObject uncanvas;
+    public Player player;
 
     private List<GameObject> allSlots;
+    public bool showing = false;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         CreateLayout();
-        //inventoryRect.gameObject.SetActive(false);
+        show(false);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (Input.GetKeyUp(KeyCode.E))
+        {
+            show(!showing);
+            player.FreezeCharacter(showing);
+        }
 	}
+
+    public void show(bool showing)
+    {
+        if (showing)
+        {
+            panel.transform.SetParent(canvas.transform);
+        }
+        else
+        {
+            panel.transform.SetParent(uncanvas.transform);
+        }
+        this.showing = showing;
+    }
 
     private void CreateLayout()
     {

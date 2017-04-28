@@ -153,7 +153,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void LockCursor(bool locking)
+    public void LockCursor(bool locking)
     {
         mouseLook.SetCursorLock(locking);
         if (locking)
@@ -190,6 +190,7 @@ public class Player : MonoBehaviour
             charController.enabled = true;
             playerController.m_UseHeadBob = true;
         }
+        LockCursor(!freeze);
     }
 
     public void CharacterDeath()
@@ -199,8 +200,7 @@ public class Player : MonoBehaviour
         FreezeCharacter(true);
 
         healthSlider.value = 0;
-
-        LockCursor(false);
+        
         if (deathPanel != null)
         {
             deathPanel.SetActive(true);
@@ -218,8 +218,7 @@ public class Player : MonoBehaviour
         thirstSlider.value = maxThirst;
         healthSlider.value = maxHealth;
         staminaSlider.value = maxStamina;
-
-        LockCursor(true);
+        
         if (deathPanel != null)
         {
             deathPanel.SetActive(false);
