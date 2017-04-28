@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 
-public class PlayerVitals : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public bool singlePlayer;
 
